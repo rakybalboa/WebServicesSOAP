@@ -5,27 +5,23 @@ import time
 
 import json
 
-password = input("Please enter WebServices Authorization Code: ")
-for x in range(1, 72):
-    url = "https://www.beautyparkanadolu.com/Servis/UrunServis.svc?wsdl"
-    client = Client(url)
-    response = client.service.SelectKategori(password,x)
+class UrunFiltre:
+    def __init__(self, id):
+        self.UrunKartiID = id
 
-    print(f"response: {x}", response)
-    time.sleep(8)
-#Result of 1
-"""Forcing soap:address location to HTTPS
-response:  [{
-    'Aktif': True,
-    'ID': 1,
-    'Icerik': None,
-    'KategoriMenuGoster': True,
-    'Kod': None,
-    'PID': 0,
-    'SeoAnahtarKelime': 'CİHAZLAR ',
-    'SeoSayfaAciklama': 'CİHAZLAR CİHAZLAR Protez Tırnak ve Cilt Bakım Ekipmanları',
-    'SeoSayfaBaslik': ' CİHAZLAR CİHAZLAR',
-    'Sira': 1,
-    'Tanim': 'CİHAZLAR',
-    'Url': '/cihazlar'
-}]"""
+
+password = input("Please enter WebServices Authorization Code: ")
+
+url = "https://www.beautyparkanadolu.com/Servis/UrunServis.svc?wsdl"
+client = Client(url)
+product_filter = {
+    "Aktif":1, #When this line is acctive only, the first product with ID=8 is shown
+    #"UrunKartiID": 0
+    "Barkod": 'EAA-02' #This line doesn't work without when "Aktif" option isn't active
+    #"ToplamStokAdediBas": 0,
+    #"ToplamStokAdediSon": 0,
+    #"TedarikciID": 0,
+}
+response = client.service.SelectUrun(password, product_filter,"")
+
+print("response: ", response)
